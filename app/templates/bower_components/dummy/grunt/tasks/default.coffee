@@ -1,7 +1,7 @@
 module.exports = (grunt)->
-    grunt.registerTask 'default', [
+  grunt.registerTask 'default', [
     'concurrent:builds'
     'autoprefixer:build'
     'watch'
-    ## // insert here
+    #insert here
   ]

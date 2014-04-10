@@ -4,7 +4,6 @@ var path = require('path');
 var yeoman = require('yeoman-generator');
 var chalk = require('chalk');
 
-
 var DummiesNewGenerator = yeoman.generators.Base.extend({
   init: function () {
     this.pkg = require('../package.json');
@@ -33,12 +32,12 @@ var DummiesNewGenerator = yeoman.generators.Base.extend({
       message: 'Would you like a server?',
       default: true
     },
-    {
-      type: 'confirm',
-      name: 'CoffeeScript',
-      message: 'Would you like to enable CoffeeScript?',
-      default: true
-    },
+    // {
+    //   type: 'confirm',
+    //   name: 'CoffeeScript',
+    //   message: 'Would you like to enable CoffeeScript?',
+    //   default: true
+    // },
     {
      type: 'checkbox',
       name: 'dependencies',
@@ -115,12 +114,10 @@ var DummiesNewGenerator = yeoman.generators.Base.extend({
     this.copy('bower_components/dummy/.editorconfig', '.editorconfig');
     this.copy('bower_components/dummy/.gitignore', '.gitignore');
 
-    if (this.CoffeeScript) {
     this.mkdir('js/src');
     this.copy('bower_components/dummy/js/src/base.coffee', 'js/src/base.coffee');
     this.copy('bower_components/dummy/js/src/main.coffee', 'js/src/main.coffee');
     this.copy('bower_components/dummy/grunt/tasks/options/coffee.coffee', 'grunt/tasks/options/coffee.coffee');
-    }
 
     if(this.Server) this._addConnect();
   },
@@ -145,11 +142,11 @@ var DummiesNewGenerator = yeoman.generators.Base.extend({
     this.write('grunt/package.json',file);
 
     file = this.readFileAsString('grunt/tasks/build.coffee');
-    file = file.replace("## // insert here", "'connect:default'\n## // insert here");
+    file = file.replace("## // insert here", "'connect:default'\n#insert here");
     this.write('grunt/tasks/build.coffee',file);
 
     file = this.readFileAsString('grunt/tasks/default.coffee');
-    file = file.replace("## // insert here", "'connect:default'\n## // insert here");
+    file = file.replace("## // insert here", "'connect:default'\n#insert here");
     this.write('grunt/tasks/default.coffee',file);
   },
 
