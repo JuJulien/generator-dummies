@@ -4,13 +4,18 @@ var path = require('path');
 var yeoman = require('yeoman-generator');
 var chalk = require('chalk');
 
-var DummiesNewGenerator = yeoman.generators.Base.extend({
+var DummiesGenerator = yeoman.generators.Base.extend({
   init: function () {
     this.pkg = require('../package.json');
 
     this.on('end', function () {
       if (!this.options['skip-install']) {
-        //this.installDependencies();
+        var currentdir = process.cwd() + '/grunt';
+        process.chdir(currentdir);
+        this.installDependencies({
+          bower: true,
+          npm: true
+        });
       }
     });
 
@@ -63,8 +68,6 @@ var DummiesNewGenerator = yeoman.generators.Base.extend({
 
   app: function () {
 
-    this._addDependencies(this.dependencies.tabDep);
-
     this.mkdir('css');
     this.mkdir('css/src');
 
@@ -100,7 +103,11 @@ var DummiesNewGenerator = yeoman.generators.Base.extend({
     this.mkdir('js');
     this.mkdir('js/components');
     this.mkdir('js/htc');
+    this.mkdir('js/src');
 
+    this.copy('bower_components/dummy/js/src/base.coffee', 'js/src/base.coffee');
+    this.copy('bower_components/dummy/js/src/main.coffee', 'js/src/main.coffee');
+    this.copy('bower_components/dummy/grunt/tasks/options/coffee.coffee', 'grunt/tasks/options/coffee.coffee');
     this.copy('bower_components/dummy/js/htc/backgroundsize.min.htc', 'js/htc/backgroundsize.min.htc');
     this.copy('bower_components/dummy/js/base.js', 'js/base.js');
     this.copy('bower_components/dummy/js/base.js.map', 'js/base.js.map');
@@ -114,12 +121,9 @@ var DummiesNewGenerator = yeoman.generators.Base.extend({
     this.copy('bower_components/dummy/.editorconfig', '.editorconfig');
     this.copy('bower_components/dummy/.gitignore', '.gitignore');
 
-    this.mkdir('js/src');
-    this.copy('bower_components/dummy/js/src/base.coffee', 'js/src/base.coffee');
-    this.copy('bower_components/dummy/js/src/main.coffee', 'js/src/main.coffee');
-    this.copy('bower_components/dummy/grunt/tasks/options/coffee.coffee', 'grunt/tasks/options/coffee.coffee');
-
     if(this.Server) this._addConnect();
+
+    this._addDependencies(this.dependencies.tabDep);
   },
 
   projectfiles: function () {
@@ -142,11 +146,11 @@ var DummiesNewGenerator = yeoman.generators.Base.extend({
     this.write('grunt/package.json',file);
 
     file = this.readFileAsString('grunt/tasks/build.coffee');
-    file = file.replace("## // insert here", "'connect:default'\n#insert here");
+    file = file.replace("#insert here", "'connect:default'\n#insert here");
     this.write('grunt/tasks/build.coffee',file);
 
     file = this.readFileAsString('grunt/tasks/default.coffee');
-    file = file.replace("## // insert here", "'connect:default'\n#insert here");
+    file = file.replace("#insert here", "'connect:default'\n#insert here");
     this.write('grunt/tasks/default.coffee',file);
   },
 
@@ -162,4 +166,4 @@ var DummiesNewGenerator = yeoman.generators.Base.extend({
   }
 });
 
-module.exports = DummiesNewGenerator;
+module.exports = DummiesGenerator;
